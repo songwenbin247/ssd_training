@@ -1,0 +1,21 @@
+item{
+	id: 1
+	name: 'modbus bridge'
+
+}
+item{
+	id: 2
+	name: 'relay'
+}
+item{
+	id: 3
+	name: 'temperature'
+}
+item{
+	id: 4
+	name: 'fan'
+}
+item{
+	id: 5
+	name: 'heater'
+}
