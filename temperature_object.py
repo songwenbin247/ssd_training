@@ -4,7 +4,7 @@ import sys
 import tensorflow as tf
 import cv2
 from opc_client import opc_client
-
+from mjpg_stream import mjpg_stream
 import collections
 from io import StringIO
 #from matplotlib import pyplot as plt
@@ -146,8 +146,10 @@ category_index = label_map_util.create_category_index(categories)
 
 ##Open the Camera
 
-cap = cv2.VideoCapture(1)
-
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print('Can\'t open Video')
+    exit(1)
 ##Detection
 with detection_graph.as_default():
     with tf.Session(graph=detection_graph) as sess:
@@ -157,6 +159,7 @@ with detection_graph.as_default():
         detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
         num_detection = detection_graph.get_tensor_by_name('num_detections:0')
         opc_info= opc_client(sys.argv[3])
+        mjpg = mjpg_stream()
 
         while True:
             ret, image_np = cap.read()
@@ -173,8 +176,9 @@ with detection_graph.as_default():
                 category_index,
                 use_normalized_coordinates=True,
                 line_thickness=3)
+            mjpg.imout(image_np)
             cv2.imshow("object", image_np)
-            if (cv2.waitKey(30) & 0xff == ord('q')):
+            if (cv2.waitKey(100) & 0xff == ord('q')):
                 opc_info.opc_destroy()
                 break
 cap.release()
