@@ -3,12 +3,12 @@ import os
 import sys
 import tensorflow as tf
 import cv2
+from time import sleep
 from opc_client import opc_client
 from mjpg_stream import mjpg_stream
 import collections
 from io import StringIO
 #from matplotlib import pyplot as plt
-from PIL import Image
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
@@ -176,10 +176,7 @@ with detection_graph.as_default():
                 category_index,
                 use_normalized_coordinates=True,
                 line_thickness=3)
-            mjpg.imout(image_np)
-            cv2.imshow("object", image_np)
-            if (cv2.waitKey(100) & 0xff == ord('q')):
-                opc_info.opc_destroy()
+                mjpg.imout(image_np)
+                sleep(0.02)
                 break
 cap.release()
-cv2.destroyAllWindows()

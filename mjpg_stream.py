@@ -12,10 +12,8 @@ class mjpg_stream():
         self.buf.append('\0')
         self.buf.append('\0')
         self.buf.append('\0')
-        self.d = 0
     def imout(self,frame):
         file = cv2.imencode(".jpg", frame)
-        self.d = self.d + 1
         self.buf[8] = file[1].shape[0] >> 24 & 0xff
         self.buf[9] = file[1].shape[0] >> 16 & 0xff
         self.buf[10] = file[1].shape[0] >> 8 & 0xff
@@ -25,7 +23,6 @@ class mjpg_stream():
         self.fd.flush()
         self.fd.write(file[1])
         self.fd.flush()
-        pass
     def __del__(self):
         self.fd.close()
 
